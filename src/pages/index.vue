@@ -12,7 +12,7 @@
                 <div>阅豆</div>
             </div>
             <div @click="goNext({path:'/waitRead/'+selfId })">
-                <div>1</div>
+                <div>{{articleCount}}</div>
                 <div>文章</div>
             </div>
             <div class="bg" @click="tip()">
@@ -22,7 +22,7 @@
                 <div>曝光</div>
             </div>
             <div @click="goNext({name: 'waitRead'})">
-                <div>1</div>
+                <div>{{waitReadCount}}</div>
                 <div>待回阅</div>
             </div>
         </div>
@@ -34,7 +34,7 @@
             <VueBetterScroll class="wrapper" ref="scroll" @pullingDown="pullingDown()" @pullingUp="onPullingUp()">
                 <transition-group tag='div' class="read-list-item" name="list">
                     <div @click="redirect(item.url)" v-for="(item) in articles" :key="item.id">
-                        <img src="~assets/miao.jpg">
+                        <img :src="item.userPic">
                         <div>
                             <div>
                                 <span>{{item.title}}</span>
@@ -45,8 +45,7 @@
                                 <span>曝光：{{item.exposure}}</span>
                             </div>
                         </div>
-                        <img v-if="item.top" class="zhid" src="~assets/zhiding.png"/>
-                    </div>
+                        <img v-if="item.top" class="zhid" src="~assets/zhiding.png"/>                    </div>
                 </transition-group>
             </VueBetterScroll>
         </div>
@@ -108,8 +107,25 @@
             // ...
         },
         created() {
-            this.$http.post("http://localhost:82/initPage",{userId: 1396511473}).then(res=>{
-                console.log(JSON.stringify(res.data))
+            this.$http.post("http://localhost:82/initPage", {userId: 1396511473}, {emulateJSON: true}).then(res => {
+                //this.articles = []
+                if (res.data.result) {
+                    this.readPeas = res.data.readPeas
+                    this.articleCount = res.data.articleCount
+                    this.waitReadCount = res.data.waitReadCount
+                    for (var i in res.data.rankList) {
+                        const obj = {
+                            url: res.data.rankList[i].articleUrl,
+                            title: res.data.rankList[i].articleTitle,
+                            belong: res.data.rankList[i].publisher,
+                            exposure: res.data.rankList[i].exposure,
+                            userPic: 'assets/miao.jpg',//res.data.rankList[i].userPic,
+                            top: true,
+                            id: i + 1
+                        }
+                        this.articles.push(obj)
+                    }
+                }
             })
             login.call(this, {openId: '123456'}).then((res) => {
                 console.log(res)
@@ -123,6 +139,8 @@
         },
         data() {
             return {
+                articleCount: '',
+                waitReadCount: '',
                 readPeas: 1,
                 checked: false,
                 article: {
@@ -139,6 +157,7 @@
                         title: '立马回阅',
                         belong: 'stime',
                         exposure: '10',
+                        userPic: '~assets/zhiding.png',
                         top: true,
                         id: 1
                     },
@@ -147,6 +166,7 @@
                         title: '立马回阅',
                         belong: 'stime',
                         exposure: '10',
+                        userPic: '~assets/zhiding.png',
                         top: true,
                         id: 2
                     },
@@ -154,6 +174,8 @@
                         url: 'https://mp.weixin.qq.com/s/RyyjgKQz0OL9wAFgzaIgLg',
                         title: '立马回阅',
                         belong: 'stime',
+                        userPic: '~assets/zhiding.png',
+                        top: true,
                         exposure: '10',
                         id: 3
                     }
