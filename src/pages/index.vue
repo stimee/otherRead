@@ -103,7 +103,7 @@
 <script>
 import { Toast } from 'vant'
 import { Notify } from 'vant';
-import { userInfo, initPage, login } from 'http/api.js'
+import { userInfo, initPage } from 'http/api.js'
 
 export default {
   beforeRouteEnter(to, from, next) {
