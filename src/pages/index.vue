@@ -1,8 +1,8 @@
 <template>
     <div class="root">
         <div class="userInfo">
-            <img src="~assets/miao.jpg">
-            <span>简单点</span>
+            <img :src="userInfo.picUrl">
+            <span>{{userInfo.nickname}}</span>
             <van-button @click="show=true">发布我的文章</van-button>
             <van-button @click="goNext('share')">呼叫友军</van-button>
         </div>
@@ -107,6 +107,13 @@
             // ...
         },
         created() {
+            this.$http.post("http://localhost:82/userInfo", {userId: 1396511473}, {emulateJSON: true}).then(res => {
+                if(res.data.result){
+                    this.userInfo=res.data.user
+                    this.userInfo.picUrl=require('assets/'+this.userInfo.picUrl+'.jpg')
+                }
+            })
+
             this.$http.post("http://localhost:82/initPage", {userId: 1396511473}, {emulateJSON: true}).then(res => {
                 //this.articles = []
                 if (res.data.result) {
@@ -139,6 +146,15 @@
         },
         data() {
             return {
+                userInfo: {
+                    userId: '',
+                    nickname: '',
+                    password: '',
+                    picUrl: '',
+                    readPeas: '',
+                    phone: '',
+                    registerTime: ''
+                },
                 articleCount: '',
                 waitReadCount: '',
                 readPeas: 1,
