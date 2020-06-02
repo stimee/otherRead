@@ -107,14 +107,16 @@
             // ...
         },
         created() {
-            this.$http.post("http://localhost:82/userInfo", {userId: 1396511473}, {emulateJSON: true}).then(res => {
+            //123.56.134.30
+            //localhost:88
+            this.$http.post("http://123.56.134.30/userInfo", {userId: 1396511473}, {emulateJSON: true}).then(res => {
                 if(res.data.result){
                     this.userInfo=res.data.user
                     this.userInfo.picUrl=require('assets/'+this.userInfo.picUrl+'.jpg')
                 }
             })
 
-            this.$http.post("http://localhost:82/initPage", {userId: 1396511473}, {emulateJSON: true}).then(res => {
+            this.$http.post("http://123.56.134.30/initPage", {userId: 1396511473}, {emulateJSON: true}).then(res => {
                 //this.articles = []
                 if (res.data.result) {
                     this.readPeas = res.data.readPeas
