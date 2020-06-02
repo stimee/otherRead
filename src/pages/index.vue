@@ -45,7 +45,7 @@
                                 <span>曝光：{{item.exposure}}</span>
                             </div>
                         </div>
-                        <img v-if="item.top" class="zhid" src="~assets/zhiding.png"/>                    </div>
+                        <img v-if="item.top" class="zhid" src="~assets/zhiding.jpg"/>                    </div>
                 </transition-group>
             </VueBetterScroll>
         </div>
@@ -119,7 +119,7 @@
                             title: res.data.rankList[i].articleTitle,
                             belong: res.data.rankList[i].publisher,
                             exposure: res.data.rankList[i].exposure,
-                            userPic: 'assets/miao.jpg',//res.data.rankList[i].userPic,
+                            userPic: require('assets/'+res.data.rankList[i].userPic+'.jpg'),//res.data.rankList[i].userPic,
                             top: true,
                             id: i + 1
                         }
@@ -151,35 +151,7 @@
                 sms: '',
                 show: false,
                 selfId: 11,
-                articles: [
-                    {
-                        url: 'https://mp.weixin.qq.com/s/RyyjgKQz0OL9wAFgzaIgLg',
-                        title: '立马回阅',
-                        belong: 'stime',
-                        exposure: '10',
-                        userPic: '~assets/zhiding.png',
-                        top: true,
-                        id: 1
-                    },
-                    {
-                        url: 'https://mp.weixin.qq.com/s/RyyjgKQz0OL9wAFgzaIgLg',
-                        title: '立马回阅',
-                        belong: 'stime',
-                        exposure: '10',
-                        userPic: '~assets/zhiding.png',
-                        top: true,
-                        id: 2
-                    },
-                    {
-                        url: 'https://mp.weixin.qq.com/s/RyyjgKQz0OL9wAFgzaIgLg',
-                        title: '立马回阅',
-                        belong: 'stime',
-                        userPic: '~assets/zhiding.png',
-                        top: true,
-                        exposure: '10',
-                        id: 3
-                    }
-                ],
+                articles: [],
                 phone: '15657795363',
                 showLogin: false
             }

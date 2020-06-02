@@ -1,6 +1,6 @@
 <template>
   <div class="root">
-    <img src="~assets/fanhuis.png" @click="$router.back()" class="back">
+    <img src="~assets/fanhuis.jpg" @click="$router.back()" class="back">
     <div>
         呼叫友军立刻获得5阅豆<br>感谢您为这个大家庭做出的贡献
     </div>

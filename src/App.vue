@@ -29,7 +29,7 @@ body {
 .root {
   width: 100%;
   height: 100%;
-  background-image: url(~assets/timg.png);
+  background-image: url(~assets/timg.jpg);
   background-repeat: repeat-y;
   background-size: 100% ;
   color: white;

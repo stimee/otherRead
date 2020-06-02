@@ -1,6 +1,6 @@
 <template>
   <div class="root">
-    <img src="~assets/fanhuis.png" @click="$router.back()" class="back">
+    <img src="~assets/fanhuis.jpg" @click="$router.back()" class="back">
     <div class="userInfo">
       <img src="~assets/miao.jpg">
       <span>简单点</span>
