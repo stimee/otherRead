@@ -173,9 +173,9 @@ export default {
         phone: '',
         registerTime: ''
       },
-      articleCount: '',
-      waitReadCount: '',
-      readPeas: 1,
+      articleCount: 0,
+      waitReadCount: 0,
+      readPeas: 0,
       checked: false,
       article: {
         url: '',
@@ -370,6 +370,18 @@ export default {
     margin-bottom: 6px;
     font-size: 15px;
   }
+}
+@keyframes change {
+  0% {
+    box-shadow: 0 0 0 rgba(255, 0, 0, 0), 0 0 0 rgba(255, 0, 0, 0) inset;
+  }
+  100% {
+    box-shadow: 0 2px 6px #e6d0db;
+  }
+}
+
+.red {
+  animation: change 2s ease-in-out infinite alternate;
 }
 
 .read-list {
