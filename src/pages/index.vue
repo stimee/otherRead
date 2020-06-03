@@ -1,7 +1,7 @@
 <template>
   <div class="root">
     <div class="userInfo">
-      <img :src="userInfo.picUrl" />
+      <img :src="userInfo.picUrl?require('assets/'+userInfo.picUrl+'.jpg'):''" />
       <span>{{userInfo.nickname}}</span>
       <van-button @click="show=true">发布我的文章</van-button>
       <van-button @click="goNext('share')">呼叫友军</van-button>
@@ -11,7 +11,7 @@
         <div>{{readPeas}}</div>
         <div>阅豆</div>
       </div>
-      <div @click="goNext({path:'/waitRead/'+selfId })">
+      <div @click="goNext({name: 'myArticle'})">
         <div>{{articleCount}}</div>
         <div>文章</div>
       </div>
@@ -103,7 +103,7 @@
 <script>
 import { Toast } from 'vant'
 import { Notify } from 'vant';
-import { userInfo, initPage } from 'http/api.js'
+import { userInfo, initPage, addArticle } from 'http/api.js'
 
 export default {
   beforeRouteEnter(to, from, next) {
@@ -125,13 +125,8 @@ export default {
     // ...
   },
   created() {
-    userInfo.call(this, { userId: 1396511473 }).then(res => {
-      if (res.data.result) {
-        this.userInfo = res.data.user
-        this.userInfo.picUrl = require('assets/' + this.userInfo.picUrl + '.jpg')
-      }
-    })
 
+    this.initUserInfo()
     initPage.call(this, { userId: 1396511473 }).then(res => {
       if (res.data.result) {
         this.readPeas = res.data.readPeas
@@ -196,6 +191,14 @@ export default {
         this.show = true
       }
     },
+    initUserInfo() {
+      userInfo.call(this, { userId: 1396511473 }).then(res => {
+        if (res.data.result) {
+          this.userInfo = res.data.user
+          // this.userInfo.picUrl = require('assets/' + res.data.user.picUrl + '.jpg')
+        }
+      })
+    },
     judge(needPeas) {
       if (this.readPeas < needPeas) {
         Toast.fail('阅读不足\n无法发布文章\n赶快阅读文章')
@@ -208,26 +211,42 @@ export default {
         return false
       }
       if (this.article.url && this.article.title) {
-        let article = {
-          ...this.article,
-          belong: 'stime',
-          exposure: '0',
-          top: this.checked,
-          id: this.articles.length + 1
-        }
-        if (this.checked) {
-          this.articles.splice(0, 0, article)
-          this.readPeas = this.readPeas - 5
-        } else {
-          this.articles.push(article)
-          this.readPeas = this.readPeas - 1
-        }
+        let params = {
+          userId: this.userInfo.userId,
+          title: this.article.title,
+          articleLink: this.article.url,
+          isTop: this.checked ? 1 : 0,
 
-        this.article.url = ''
-        this.article.title = ''
+        }
+        addArticle.call(this, params).then((res) => {
+          //本地增加文章
+          this.addLoaclArticle()
+          //文章发布后重新获取用户信息
+          this.initUserInfo()
+        })
+
       } else {
         Toast.fail('内容不能为空')
       }
+    },
+    addLoaclArticle() {
+      let article = {
+        ...this.article,
+        belong: this.userInfo.nickname,
+        exposure: '0',
+        top: this.checked,
+        id: this.articles.length + 1,
+        userPic: require('assets/' + this.userInfo.picUrl + '.jpg')
+      }
+      if (this.checked) {
+        this.articles.splice(0, 0, article)
+        this.readPeas = this.readPeas - 5
+      } else {
+        this.articles.push(article)
+        this.readPeas = this.readPeas - 1
+      }
+      this.article.url = ''
+      this.article.title = ''
     },
     getCode() {
       if (this.phone == '15657795363') {
